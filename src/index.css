@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+    --color-brand-primary: #210124;
+    --color-brand-accent: #7C3AED;
+    --color-brand-secondary: #F8F7FC;
+
+    --color-status-success: #10B981;
+    --color-status-danger: #EF4444;
+
+    --color-border: #E5E7EB;
+
+    --color-text-primary: #1F2937;
+    --color-text-secondary: #6B7280;
+
+    --color-white: #FFFFFF;
+}
+
+@layer components {
+  .hero-title {
+    @apply text-4xl font-bold;
+  }
+
+  .section-heading {
+    @apply text-2xl font-semibold;
+  }
+
+  .card-title {
+    @apply text-lg font-medium;
+  }
+
+  .label-text {
+    @apply text-sm font-medium;
+  }
+
+  .body-text {
+    @apply text-base;
+  }
+}
+
+@layer base {
+    input: -webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px var(--color-brand-primary) inset !important;
+        -webkit-text-fill-color: theme('--color-brand-secondary') !important;
+    }
+}
+
+/* 
+Primary - #210124 - dark plum
+Secondary - #F8F7FC - soft white
+Accent - #8B5CF6 - purple
+Success - #10B981 - emerald
+Warning - #F59E0B - amber
+text - #1F2937 - dark gray
+border - #E5E7EB - light gray
+*/
