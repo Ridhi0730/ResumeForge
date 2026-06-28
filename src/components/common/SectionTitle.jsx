@@ -1,17 +1,24 @@
-import React from 'react'
+import React from "react";
 
-const SectionTitle = ({title, subtitle}) => {
+const SectionTitle = ({
+  title,
+  subtitle,
+}) => {
   return (
-    <div className="mb-6">
-        <h2 className="text-2xl font-semibold">
-            {title}
-        </h2>
-      
-        <p className="text-gray-600">
-            {subtitle}
-        </p>
-    </div>
-  )
-}
+    <div className="mb-8">
 
-export default SectionTitle
+      <h2 className="section-heading text-brand-primary">
+        {title}
+      </h2>
+
+      <p className="mt-2 text-text-secondary">
+        {subtitle}
+      </p>
+
+      <div className="mt-6 border-b border-border" />
+
+    </div>
+  );
+};
+
+export default SectionTitle;

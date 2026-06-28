@@ -13,6 +13,7 @@ const ProgressBar = ({ step }) => {
     {
       id: 1,
       title: "Personal Information",
+      short: "Personal",
       icon: User,
     },
     {
@@ -38,7 +39,7 @@ const ProgressBar = ({ step }) => {
   ];
 
   return (
-    <div className="w-full px-10 py-8">
+    <div className="rf-container py-6">
       <div className="flex items-start justify-between">
         {steps.map((item, index) => {
           const Icon = item.icon;
@@ -46,14 +47,16 @@ const ProgressBar = ({ step }) => {
           return (
             <div
               key={item.id}
-              className="flex flex-1 items-center"
+              className="flex flex-1 min-w-0 items-center"
             >
               {/* Step */}
               <div className="flex flex-col items-center">
                 <div
                   className={`
-                    w-12
-                    h-12
+                    w-10
+                    h-10
+                    md:w-12
+                    md:h-12
                     rounded-full
                     flex
                     items-center
@@ -79,10 +82,13 @@ const ProgressBar = ({ step }) => {
 
                 <p
                   className={`
-                    mt-3
-                    text-sm
+                    mt-2
+                    max-w-22.5
+                    text-[11px]
                     text-center
-                    w-28
+                    md:text-sm
+                    leading-tight
+                    wrap-break-word
 
                     ${
                       item.id <= step
@@ -91,7 +97,13 @@ const ProgressBar = ({ step }) => {
                     }
                   `}
                 >
-                  {item.title}
+
+                  <span className="md:hidden">
+                    {item.short}
+                  </span>
+                  <span className="hidden md:block">
+                    {item.title}
+                  </span>
                 </p>
               </div>
 
@@ -99,13 +111,12 @@ const ProgressBar = ({ step }) => {
               {index !== steps.length - 1 && (
                 <div
                   className={`
+                    hidden
                     flex-1
                     h-1
-                    mx-2
-                    mb-8
+                    mx-3
+                    md:flex
                     rounded-full
-                    transition-all
-                    duration-300
 
                     ${
                       item.id < step

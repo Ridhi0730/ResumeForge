@@ -7,6 +7,8 @@ import ExperienceForm from './components/forms/ExperienceForm';
 import ProjectForm from './components/forms/ProjectForm';
 import SkillForm from './components/forms/SkillForm';
 import ResumePreview from './components/preview/ResumePreview';
+import Navigation from './components/layout/Navigation';
+import Workspace from './components/layout/Workspace';
 
 
 const App = () => {
@@ -27,53 +29,40 @@ const App = () => {
     <div className='p-4'>
       <Header />
       <ProgressBar step={step} />
-      <div className='flex justify-center items-center'>
-        {
-        step===1 && (
-          <PersonalInfoForm 
-            formData={formData}
+
+      <Workspace
+        leftPanel={
+          step === 1 ? (
+            <PersonalInfoForm 
+            formData={formData} 
+            setFormData={setFormData} 
+            />
+          ) : step === 2 ? (
+            <EducationForm
+            formData={formData} 
             setFormData={setFormData}
-          />
-      )}
-      {
-        step===2 && (
-          <EducationForm />
-      )
+            />
+          ) : step === 3 ? (
+            <ExperienceForm />
+          ) : step === 4 ? (
+            <ProjectForm />
+          ) : (
+            <SkillForm />
+          )
+        }
+        rightPanel={<ResumePreview formData={formData} />
       }
-      {
-        step===3 && (
-          <ExperienceForm />
-        )
-      }
-      {
-        step===4 && (
-          <ProjectForm />
-        )
-      }
-      {
-        step===5 && (
-          <SkillForm />
-        )
-      }
-      <ResumePreview formData={formData} />
-      </div>
-      {/* Navigation Buttons */}
-      <div className='flex justify-between mt-8'>
-        <button
-          onClick={()=>setStep((prev) => prev - 1)}
-          disabled={step===1}
-        >
-          Previous
-        </button>
-        <button
-          onClick={()=>setStep((prev) => prev + 1)}
-          disabled={step===5}
-        >
-          Next
-        </button>
-      </div>
+      />
+
+      {/* Navigation Buttons
+      <Navigation
+          step={step}
+          setStep={setStep}
+          formData={formData}
+        /> */}
     </div>
-  )
+  );
 }
+
 
 export default App

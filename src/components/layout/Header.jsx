@@ -1,17 +1,20 @@
-import React from 'react'
+import Logo from "../common/Logo";
+import Button from "../common/Button";
 
 const Header = () => {
   return (
-    <header className="bg-brand-primary text-white p-6 shadow-md">
-        <h1 className="text-3xl font-bold">
-            ResumeForge
-        </h1>
+    <header className="bg-brand-primary shadow-md">
+      <div className="rf-container h-20 flex items-center justify-between">
+        <Logo />
 
-        <p className="text-gray-200 mt-1">
-            Build. Preview. Download. Your Resume in Minutes.
-        </p>
+        {/* Right Side */}
+        <Button variant="success">
+          Save Draft
+        </Button>
+
+      </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

@@ -1,0 +1,90 @@
+@theme {
+
+  /* ===========================
+     Brand Colors
+  =========================== */
+
+  --color-brand-primary: #210124;
+  --color-brand-primary-hover: #3A0B3C;
+  --color-brand-secondary: #FFFFFF;
+  --color-brand-accent: #7C3AED;
+
+  /* ===========================
+     Workspace
+  =========================== */
+
+  --color-bg-workspace: #F8FAFC;
+
+  /* ===========================
+     Text
+  =========================== */
+
+  --color-text-primary: #1E293B;
+  --color-text-secondary: #475569;
+
+  /* ===========================
+     Status
+  =========================== */
+
+  --color-status-success: #22C55E;
+  --color-status-danger: #EF4444;
+  --color-status-warning: #F59E0B;
+
+  /* ===========================
+     Borders
+  =========================== */
+
+  --color-border: #E5E7EB;
+  --color-border-card: #E2E8F0;
+
+  /* ===========================
+     Neutral
+  =========================== */
+
+  --color-white: #FFFFFF;
+
+  /* ===========================
+     Spacing Tokens
+  =========================== */
+
+  --spacing-xs: 4px;
+
+  --spacing-sm: 8px;
+
+  --spacing-md: 16px;
+
+  --spacing-lg: 24px;
+
+  --spacing-xl: 32px;
+
+  /* ===========================
+     Font Families
+  =========================== */
+
+  --font-heading: "Poppins", sans-serif;
+
+  --font-body: "Inter", sans-serif;
+
+  /* ===========================
+     Border Radius
+  =========================== */
+
+  --radius-sm: 8px;
+
+  --radius-md: 12px;
+
+  --radius-lg: 16px;
+
+  --radius-xl: 24px;
+
+  /* ===========================
+     Shadows
+  =========================== */
+
+  --shadow-card:
+      0px 4px 10px rgba(0,0,0,.08);
+
+  --shadow-paper:
+      0px 12px 30px rgba(0,0,0,.15);
+
+}
