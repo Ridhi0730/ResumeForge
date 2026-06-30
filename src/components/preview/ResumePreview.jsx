@@ -8,7 +8,15 @@ import ResumeExperience from './sections/ResumeExperience'
 import ResumeProjects from './sections/ResumeProjects'
 import ResumeSkills from './sections/ResumeSkills'
 
-const ResumePreview = ({ formData }) => {
+import Button from '../common/Button'
+
+const ResumePreview = ({ 
+    formData,
+    resumeName,
+    setResumeName,
+    handleDownload,
+   }) => {
+
   return (
     <Card className="rf-panel h-full flex flex-col bg-bg-workspace">
       {/* A4 Paper */}
@@ -41,6 +49,30 @@ const ResumePreview = ({ formData }) => {
             />          
 
           </ResumePage>
+
+          <div className="mt-6 flex items-stretch gap-3">
+          <div className="flex-1">
+            <input
+              type="text"
+              label="Resume Name"
+              value={resumeName}
+              onChange={(e) => setResumeName(e.target.value)}
+              placeholder="My Resume"
+              className="w-full text-xl rounded-xl border border-brand-primary/30 px-5 py-2 focus:border-brand-primary focus:outline-none"
+            />
+          </div>
+
+          <div className='flex items-end'>
+          <Button
+            variant="primary"
+            onClick={handleDownload}
+            className="w-full md:w-auto px-5 py-2"
+          >
+            Download Resume
+          </Button>
+          </div>
+        </div>
+          
           </div>
         </div>
       </div>

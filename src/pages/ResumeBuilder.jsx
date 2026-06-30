@@ -48,6 +48,10 @@ const ResumeBuilder = () => {
   const [saveStatus, setSaveStatus] = useState("idle");
   // idle | saving | saved
 
+  /* ---------------------- Resume Name ------------------------- */
+
+  const [resumeName, setResumeName] = useState("My Resume");
+
   /* -------------------- LOAD FROM STORAGE -------------------- */
 
   const [formData, setFormData] = useState(() => {
@@ -69,8 +73,6 @@ const ResumeBuilder = () => {
   /* -------------------- SAVE FUNCTION -------------------- */
 
   const saveToStorage = async(data) => {
-    console.log("SAVE STATUS IN UI:", saveStatus);
-
     setSaveStatus("saving");
 
     await new Promise((r)=> setTimeout(r, 50));
@@ -134,6 +136,27 @@ const ResumeBuilder = () => {
       setSaveStatus("idle");
       }
     };
+
+      /* ------------------ Resume Download ------------------ */
+
+
+    const handleDownload = () => {
+      const dataStr = JSON.stringify(formData, null, 2);
+
+      const blob = new Blob([dataStr], {
+        type: "application/json",
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${resumeName || "resume"}.json`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
 
   /* -------------------- UI -------------------- */
 
@@ -212,9 +235,17 @@ const ResumeBuilder = () => {
           )
         }
         rightPanel={
-          <ResumePreview formData={formData} />
+          <ResumePreview 
+            formData={formData} 
+            resumeName={resumeName}
+            setResumeName={setResumeName}
+            handleDownload={handleDownload}
+            />
+
         }
+        
       />
+      
     </div>
   );
 };

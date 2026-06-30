@@ -10,7 +10,6 @@ const Navigation = ({
 }) => {
 
   const safeSave = () => {
-    console.log("Nav props: ", {saveDraftManually})
     if (typeof saveDraftManually !== "function") {
       console.error("saveDraftManually is missing or not a function", saveDraftManually);
       return;

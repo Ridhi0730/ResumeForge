@@ -11,9 +11,7 @@ const FormLayout = ({
   saveDraftManually,
   saveStatus,
 }) => {
-
-  console.log("FormLayout props:", { saveDraftManually });
-
+  
   return (
     <Card className="flex flex-col h-full">
 
