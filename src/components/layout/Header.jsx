@@ -4,15 +4,13 @@ import Button from "../common/Button";
 const Header = () => {
   return (
     <header className="bg-brand-primary shadow-md">
+      
       <div className="rf-container h-20 flex items-center justify-between">
+        
         <Logo />
 
-        {/* Right Side */}
-        <Button variant="success">
-          Save Draft
-        </Button>
-
       </div>
+
     </header>
   );
 };

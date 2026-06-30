@@ -1,16 +1,54 @@
 import React from 'react';
+import { titleCase, sentenceCase, plainText } from '../../utils/textFormatter';
 import InputField from '../common/InputField';
 import Card from '../common/Card';
 import FormLayout from './FormLayout';
 
-function PersonalInfoForm({ formData, setFormData, step, setStep }) {
+function PersonalInfoForm({ 
+  formData,
+  setFormData, 
+  step, 
+  setStep,
+  totalSteps,
+  saveDraftManually,
+  saveStatus
+   }) {
 
     const handleChange = (e) => {
     const { name, value } = e.target;
 
+    let formattedValue = value;
+
+    switch (name) {
+      case "fullName":
+      case "city":
+      case "state":
+      case "country":
+        formattedValue = titleCase(value);
+        break;
+
+      case "summary":
+        formattedValue = sentenceCase(value);
+        break
+
+      case "email":
+      case "linkedin":
+      case "github":
+      case "portfolio":
+        formattedValue = value.trim();
+        break;
+
+      case "phone":
+        formattedValue = value.trim();
+        break;
+
+      default:
+        formattedValue = plainText(value);
+      }
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: formattedValue,
     }));
   };
   
@@ -63,6 +101,8 @@ function PersonalInfoForm({ formData, setFormData, step, setStep }) {
         step={step}
         setStep={setStep}
         totalSteps={5}
+        saveDraftManually={saveDraftManually}
+        saveStatus={saveStatus}
       >
 
   <div className="space-y-6">
@@ -76,6 +116,7 @@ function PersonalInfoForm({ formData, setFormData, step, setStep }) {
       required
       description='Enter your name as you want it to appear on your resume.'
     />
+    
 
     <InputField
       label="Email Address"
@@ -116,7 +157,7 @@ function PersonalInfoForm({ formData, setFormData, step, setStep }) {
       value={formData.linkedin}
       onChange={handleChange}
       placeholder="Username"
-      prefix='linkedin.com/in/'
+      // prefix='linkedin.com/in/'
     />
 
     <InputField
@@ -126,7 +167,7 @@ function PersonalInfoForm({ formData, setFormData, step, setStep }) {
       value={formData.github}
       onChange={handleChange}
       placeholder="Username"
-      prefix='github.com/'
+      // prefix='github.com/'
     />
 
   </div>

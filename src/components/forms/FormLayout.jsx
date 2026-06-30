@@ -8,7 +8,12 @@ const FormLayout = ({
   step,
   setStep,
   totalSteps,
+  saveDraftManually,
+  saveStatus,
 }) => {
+
+  console.log("FormLayout props:", { saveDraftManually });
+
   return (
     <Card className="flex flex-col h-full">
 
@@ -24,7 +29,7 @@ const FormLayout = ({
       </div>
 
       {/* Form */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto pr-2">
         {children}
       </div>
 
@@ -33,6 +38,8 @@ const FormLayout = ({
         step={step}
         setStep={setStep}
         totalSteps={totalSteps}
+        saveDraftManually={saveDraftManually}
+        saveStatus={saveStatus}
       />
 
     </Card>

@@ -10,6 +10,9 @@
 
   .rf-panel {
     @apply
+      h-full
+      border
+      border-border
       bg-white
       rounded-2xl
       shadow-lg;
