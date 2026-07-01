@@ -3,7 +3,6 @@ import Button from "../common/Button";
 import Card from "../common/Card";
 import ProjectCard from "../cards/ProjectCard";
 import FormLayout from "./FormLayout";
-import { titleCase, sentenceCase, plainText } from "../../utils/textFormatter";
 
 const ProjectForm = ({
   formData,
@@ -52,26 +51,7 @@ const ProjectForm = ({
 
   const handleProjectChange = (id, field, value) => {
 
-      let formattedValue = value;
-
-      switch (field) {
-      case "title":
-      case "role":
-        formattedValue = titleCase(value);
-        break;
-
-      case "description":
-        formattedValue = sentenceCase(value);
-        break;
-
-      case "liveLink":
-      case "githubLink":
-        formattedValue = value.trim();
-        break;
-
-      default:
-        formattedValue = plainText(value);
-    }
+      const formattedValue = value;
 
     setFormData(prev => ({
       ...prev,

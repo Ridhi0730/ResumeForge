@@ -13,7 +13,7 @@ const FormLayout = ({
 }) => {
   
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full p-8">
 
       {/* Header */}
       <div className="mb-8">

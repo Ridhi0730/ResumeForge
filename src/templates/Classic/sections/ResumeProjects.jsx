@@ -1,4 +1,4 @@
-import { formatMonthYear } from "../../../utils/formatDate";
+import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
 
 const ResumeProject = ({ formData }) => {
   const { projects } = formData;
@@ -22,20 +22,20 @@ const ResumeProject = ({ formData }) => {
               {/* Title + Dates */}
               <div className="flex justify-between items-start">
                 <h3 className="font-semibold text-sm">
-                  {project.title}
+                  {displayTitle(project.title)}
                 </h3>
 
                 <span className="text-xs text-gray-600 whitespace-nowrap">
-                  {formatMonthYear(project.startDate)}
+                  {displayDate(project.startDate)}
                   {project.startDate && project.endDate && " – "}
-                  {formatMonthYear(project.endDate)}
+                  {displayDate(project.endDate)}
                 </span>
               </div>
 
               {/* Role */}
               {project.role && (
                 <p className="text-sm italic text-gray-700">
-                  {project.role}
+                  {displayTitle(project.role)}
                 </p>
               )}
 
@@ -54,7 +54,7 @@ const ResumeProject = ({ formData }) => {
                       font-medium
                     "
                   >
-                    {tech}
+                    {displayTitle(tech)}
                   </span>
                 ))}
               </div>
@@ -64,7 +64,9 @@ const ResumeProject = ({ formData }) => {
               {bullets?.length > 0 && (
                 <ul className="list-disc ml-5 mt-2 space-y-1 text-xs">
                   {bullets.map((bullet, index) => (
-                    <li key={index}>{bullet}</li>
+                    <li key={index}>
+                      {displaySentence(bullet)}
+                      </li>
                   ))}
                 </ul>
               )}

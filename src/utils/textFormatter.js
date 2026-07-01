@@ -1,85 +1,115 @@
-// Special Words
-const specialWords = {
-  javascript: "JavaScript",
-  typescript: "TypeScript",
-  react: "React",
-  "next.js": "Next.js",
-  nextjs: "Next.js",
-  "node.js": "Node.js",
-  nodejs: "Node.js",
-  express: "Express",
-  mongodb: "MongoDB",
-  mysql: "MySQL",
-  postgresql: "PostgreSQL",
-  firebase: "Firebase",
-  github: "GitHub",
-  gitlab: "GitLab",
-  html: "HTML",
-  css: "CSS",
-  scss: "SCSS",
-  tailwind: "Tailwind CSS",
-  api: "API",
-  rest: "REST",
-  graphql: "GraphQL",
-  aws: "AWS",
-  gcp: "GCP",
-  docker: "Docker",
-  kubernetes: "Kubernetes",
-  vscode: "VS Code",
-  figma: "Figma",
-  canva: "Canva",
-  c: "C",
-  "c++": "C++",
-  "c#": "C#",
-  java: "Java",
-  python: "Python",
-};
+// Exact words that should never change
+const PRESERVE = new Set([
+  "B.Tech",
+  "M.Tech",
+  "BCA",
+  "MCA",
+  "MBA",
+  "PhD",
 
-// Remove extra spaces
-export const cleanText = (text = "") => {
-  if (typeof text !== "string") return "";
-  return text.replace(/\s{2,}/g, " ");
+  "ECE",
+  "CSE",
+  "IT",
+  "AI",
+  "ML",
+
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Node.js",
+  "Express",
+  "MongoDB",
+
+  "AWS",
+  "Azure",
+  "GCP",
+
+  "SQL",
+  "MySQL",
+  "PostgreSQL",
+
+  "C",
+  "C++",
+  "C#",
+
+  "CGPA",
+]);
+
+const ACRONYMS = new Set([
+  "AI",
+  "ML",
+  "IT",
+  "ECE",
+  "CSE",
+  "AWS",
+  "SQL",
+  "GCP",
+  "API",
+  "REST",
+  "UI",
+  "UX",
+]);
+
+function formatWord(word) {
+  if (!word) return word;
+
+  if (PRESERVE.has(word))
+    return word;
+
+  if (ACRONYMS.has(word.toUpperCase()))
+    return word.toUpperCase();
+
+  if (word.includes("-")) {
+    return word
+      .split("-")
+      .map(formatWord)
+      .join("-");
+  }
+
+  return word.charAt(0).toUpperCase() +
+         word.slice(1).toLowerCase();
 }
 
-export const finalizeText = (text = "") =>
-    cleanText(text).trim();
+/*
+|--------------------------------------------------------------------------
+| Title Case
+|--------------------------------------------------------------------------
+*/
 
-// Capitalize Every Word
-export const titleCase = (text = "") => {
-  if (typeof text !== "string") return "";
-
-  const cleaned = cleanText(text);
-
-  return cleaned
+export function displayTitle(text = "") {
+  return text
     .split(" ")
-    .map((word) => {
-      const key = word.toLowerCase();
-
-      if (specialWords[key]) {
-        return specialWords[key];
-      }
-
-      return (
-        word.charAt(0).toUpperCase() +
-        word.slice(1).toLowerCase()
-      );
-    })
+    .map(formatWord)
     .join(" ");
-};
+}
 
-// Capitalize Sentences
-export const sentenceCase = (text = "") => {
-  if (typeof text !== "string") return "";
-  const cleaned = cleanText(text);
+/*
+|--------------------------------------------------------------------------
+| Sentence Case
+|--------------------------------------------------------------------------
+*/
 
-  return cleaned.replace(
-    /(^\w|[.!?]\s+\w)/g,
-    (char) => char.toUpperCase()
-  );
-};
+export function displaySentence(text = "") {
+  if (!text) return "";
 
-// Do nothing except trim spaces
-export const plainText = (text = "") => {
-  if (typeof text !== "string") return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
-  cleanText(text)};
+/*
+|--------------------------------------------------------------------------
+| Month Year
+|--------------------------------------------------------------------------
+*/
+
+export function displayDate(date) {
+  if (!date) return "";
+
+  const [year, month] = date.split("-");
+
+  return new Date(year, month - 1).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+}

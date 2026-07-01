@@ -3,7 +3,6 @@ import Button from "../common/Button";
 import Card from "../common/Card";
 import EducationCard from "../cards/EducationCard";
 import FormLayout from "./FormLayout";
-import { titleCase, sentenceCase, plainText } from "../../utils/textFormatter";
 
 const EducationForm = ({
   formData,
@@ -59,23 +58,8 @@ const EducationForm = ({
 
   const handleEducationChange = (id, field, value) => {
 
-    let formattedValue = value;
+    const formattedValue = value;
 
-    switch (field) {
-      case "degree":
-      case "branch":
-      case "institution":
-      case "location":
-        formattedValue = titleCase(value);
-        break;
-
-      case "description":
-        formattedValue = sentenceCase(value);
-        break;
-
-      default:
-        formattedValue = plainText(value);
-    }
 
     setFormData((prev) => ({
       ...prev,

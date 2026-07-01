@@ -1,4 +1,5 @@
-import { formatMonthYear } from "../../../utils/formatDate";
+import React from "react";
+import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
 
 const ResumeExperience = ({ formData }) => {
 
@@ -30,19 +31,19 @@ const ResumeExperience = ({ formData }) => {
                 </h3>
 
                 <span className="text-xs text-gray-600 whitespace-nowrap">
-                  {formatMonthYear(item.startDate)} –{" "}
+                  {displayDate(item.startDate)} –{" "}
                   {item.current
                     ? "Present"
-                    : formatMonthYear(item.endDate)}
+                    : displayDate(item.endDate)}
                 </span>
               </div>
 
               {/* Company + Location */}
               <div className="flex justify-between text-sm italic">
-                <span>{item.company}</span>
+                <span>{displayTitle(item.company)}</span>
 
                 <span className="text-xs text-gray-600">
-                  {item.location}
+                  {displayTitle(item.location)}
                 </span>
               </div>
 
@@ -50,7 +51,8 @@ const ResumeExperience = ({ formData }) => {
               {bullets?.length > 0 && (
                 <ul className="list-disc ml-5 mt-2 space-y-1 text-xs">
                   {bullets.map((bullet, index) => (
-                    <li key={index}>{bullet}</li>
+                    <li key={index}>
+                      {displaySentence(bullet)}</li>
                   ))}
                 </ul>
               )}

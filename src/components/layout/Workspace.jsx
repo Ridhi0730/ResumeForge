@@ -1,40 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Workspace = ({ leftPanel, rightPanel }) => {
-  return (
-    <main className="min-h-screen bg-bg-workspace">
-      <div className="rf-container py-8">
+  const [mobileView, setMobileView] = useState("form"); // 'form' | 'preview'
 
-        <div
-          className="
-            grid
-            grid-cols-1
-            lg:grid-cols-12
-            gap-8
-            h-[calc(100vh-8rem)]
-          "
-        >
+  return (
+    <main className="h-full min-h-0 bg-bg-workspace">
+      <div className="rf-container flex h-full min-h-0 flex-col py-4 lg:py-8">
+        {/* Mobile tab switcher — hidden at lg and above */}
+        <div className="mb-4 flex shrink-0 gap-2 lg:hidden">
+          {["form", "preview"].map((view) => (
+            <button
+              key={view}
+              type="button"
+              onClick={() => setMobileView(view)}
+              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                mobileView === view
+                  ? "bg-brand-primary text-white"
+                  : "bg-white text-text-secondary"
+              }`}
+            >
+              {view === "form" ? "Edit" : "Preview"}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid h-full min-h-0 flex-1 gap-6 lg:grid-cols-12">
           {/* Form Panel */}
           <section
-            className="
-              lg:col-span-5
-              h-[calc(100vh-4rem)]
-            "
+            className={`h-full min-h-0 lg:col-span-6 lg:flex ${
+              mobileView === "form" ? "flex" : "hidden"
+            }`}
           >
             {leftPanel}
           </section>
 
           {/* Resume Preview */}
           <section
-            className="
-              lg:col-span-7
-              h-[calc(100vh-4rem)]
-            "
+            className={`h-full min-h-0 lg:col-span-6 lg:flex ${
+              mobileView === "preview" ? "flex" : "hidden"
+            }`}
           >
             {rightPanel}
           </section>
         </div>
-
       </div>
     </main>
   );

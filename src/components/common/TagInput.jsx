@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { titleCase } from "../../utils/textFormatter";
 import InputField from "./InputField";
 import Button from "./Button";
 import Chip from "./Chip";
@@ -14,7 +13,7 @@ const TagInput = ({
   const [value, setValue] = useState("");
 
   const handleAdd = () => {
-    const formattedTag = titleCase(value.trim());
+    const formattedTag = value.trim();
 
     if (!formattedTag) return;
       if (tags.includes(formattedTag)) {

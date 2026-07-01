@@ -1,5 +1,4 @@
 import React from 'react';
-import { titleCase, sentenceCase, plainText } from '../../utils/textFormatter';
 import InputField from '../common/InputField';
 import Card from '../common/Card';
 import FormLayout from './FormLayout';
@@ -17,34 +16,7 @@ function PersonalInfoForm({
     const handleChange = (e) => {
     const { name, value } = e.target;
 
-    let formattedValue = value;
-
-    switch (name) {
-      case "fullName":
-      case "city":
-      case "state":
-      case "country":
-        formattedValue = titleCase(value);
-        break;
-
-      case "summary":
-        formattedValue = sentenceCase(value);
-        break
-
-      case "email":
-      case "linkedin":
-      case "github":
-      case "portfolio":
-        formattedValue = value.trim();
-        break;
-
-      case "phone":
-        formattedValue = value.trim();
-        break;
-
-      default:
-        formattedValue = plainText(value);
-      }
+    const formattedValue = value;
 
     setFormData((prevData) => ({
       ...prevData,

@@ -3,7 +3,6 @@ import Button from "../common/Button";
 import Card from "../common/Card";
 import ExperienceCard from "../cards/ExperienceCard";
 import FormLayout from "./FormLayout";
-import { titleCase, sentenceCase, plainText } from "../../utils/textFormatter";
 
 const ExperienceForm = ({
   formData,
@@ -12,9 +11,8 @@ const ExperienceForm = ({
   setStep,
   totalSteps,
   saveDraftManually,
-  saveStatus
+  saveStatus,
 }) => {
-
   const [activeExperience, setActiveExperience] = useState(
     formData.experience[0]?.id || null
   );
@@ -23,89 +21,101 @@ const ExperienceForm = ({
   const addExperience = () => {
     const newExperience = {
       id: Date.now(),
+
       title: "",
       company: "",
       location: "",
+
       startDate: "",
       endDate: "",
       current: false,
+
       description: "",
+
       ai: {
         bullets: [],
         suggestions: [],
-        }
-      };
+      },
+    };
+
     setFormData((prev) => ({
       ...prev,
-      experience: [
-        ...prev.experience, newExperience],
+      experience: [...prev.experience, newExperience],
     }));
-    setActiveExperience(newExperience.id)
+
+    setActiveExperience(newExperience.id);
   };
 
   // Remove Experience
   const removeExperience = (id) => {
-    setFormData((prev) => ({
-      ...prev,
-      experience: prev.experience.filter((item) => item.id !== id),
-    }));
+    setFormData((prev) => {
+      const updatedExperience = prev.experience.filter(
+        (item) => item.id !== id
+      );
+
+      if (activeExperience === id) {
+        setActiveExperience(updatedExperience[0]?.id || null);
+      }
+
+      return {
+        ...prev,
+        experience: updatedExperience,
+      };
+    });
   };
 
   // Update Experience Field
   const handleExperienceChange = (id, field, value) => {
-    let formattedValue = value;
 
-    switch (field) {
-      case "title":
-      case "company":
-      case "location":
-        formattedValue = titleCase(value);
-        break;
+    const formattedValue = value;
 
-      case "description":
-        formattedValue = sentenceCase(value);
-        break;
 
-      default:
-        formattedValue = plainText(value);
-    }
     setFormData((prev) => ({
       ...prev,
-      experience: prev.experience.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              [field]: formattedValue,
-            }
-          : item
-      ),
+      experience: prev.experience.map((item) => {
+        if (item.id !== id) return item;
+
+        return {
+          ...item,
+          [field]: formattedValue,
+
+          // Clear End Date if current job is checked
+          ...(field === "current" && formattedValue
+            ? { endDate: "" }
+            : {}),
+        };
+      }),
     }));
   };
 
   const canRemove = formData.experience.length > 1;
 
+  // -----------------------------
+  // Mock AI
+  // -----------------------------
   const generateBulletPoints = (text) => {
-  // MOCK AI (replace later with real API)
     return {
       bullets: [
-        `Developed and maintained features based on ${text?.slice(0, 25)}...`,
-        "Improved application performance and user experience.",
-        "Collaborated with cross-functional teams to deliver features on time.",
+        `Developed and maintained features based on ${text.slice(0, 25)}...`,
+        "Collaborated with cross-functional teams to deliver features on schedule.",
+        "Improved application performance and user experience through optimization.",
       ],
+
       suggestions: [
-        "Add measurable impact (e.g., improved speed by 30%)",
-        "Mention tools/technologies used (React, APIs, etc.)",
-        "Highlight scale (users, traffic, clients)",
+        "Add measurable impact (e.g. increased performance by 30%).",
+        "Mention technologies used (React, APIs, MongoDB, etc.).",
+        "Highlight business value or project scale.",
       ],
     };
   };
 
+  // AI Improve
   const handleAIImprove = (id) => {
     const exp = formData.experience.find(
       (e) => e.id === id
     );
 
-    if (!exp.description?.trim()) return;
+    if (!exp?.description?.trim()) return;
 
     const result = generateBulletPoints(exp.description);
 
@@ -123,7 +133,7 @@ const ExperienceForm = ({
               },
             }
           : item
-        ),
+      ),
     }));
   };
 
@@ -138,7 +148,6 @@ const ExperienceForm = ({
         saveDraftManually={saveDraftManually}
         saveStatus={saveStatus}
       >
-        {/* Empty State */}
         {formData.experience.length === 0 && (
           <div className="text-center py-10 border-2 border-dashed border-border rounded-xl">
             <p className="text-text-secondary mb-4">
@@ -151,7 +160,6 @@ const ExperienceForm = ({
           </div>
         )}
 
-        {/* Experience Cards */}
         <div className="space-y-6">
           {formData.experience.map((experience, index) => (
             <ExperienceCard
@@ -163,15 +171,17 @@ const ExperienceForm = ({
               canRemove={canRemove}
               handleAIImprove={handleAIImprove}
               isOpen={activeExperience === experience.id}
-              onToggle={() => 
+              onToggle={() =>
                 setActiveExperience((prev) =>
-                prev === experience.id ? null : experience.id
-            )}
+                  prev === experience.id
+                    ? null
+                    : experience.id
+                )
+              }
             />
           ))}
         </div>
 
-        {/* Add Button */}
         <div className="flex justify-center pt-4">
           <Button
             variant="secondary"
@@ -180,7 +190,6 @@ const ExperienceForm = ({
           >
             + Add Experience
           </Button>
-
         </div>
       </FormLayout>
     </Card>

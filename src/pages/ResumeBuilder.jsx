@@ -11,6 +11,8 @@ import SkillForm from "../components/forms/SkillsForm";
 
 import ResumePreview from "../components/preview/ResumePreview";
 
+import { templates } from "../templates";
+
 /* -------------------- INITIAL STATE -------------------- */
 
 const getInitialState = () => ({
@@ -52,6 +54,10 @@ const ResumeBuilder = () => {
 
   const [resumeName, setResumeName] = useState("My Resume");
 
+  /* -------------------- Templates -------------------- */
+
+  const [selectedTemplate, setSelectedTemplate] = useState("classic");
+
   /* -------------------- LOAD FROM STORAGE -------------------- */
 
   const [formData, setFormData] = useState(() => {
@@ -70,32 +76,6 @@ const ResumeBuilder = () => {
     }
   });
 
-  /* -------------------- SAVE FUNCTION -------------------- */
-
-  const saveToStorage = async(data) => {
-    setSaveStatus("saving");
-
-    await new Promise((r)=> setTimeout(r, 50));
-
-    try {
-
-      localStorage.setItem(
-        "resumeforge-draft",
-        JSON.stringify(data)
-      );
-
-      setSaveStatus("saved");
-
-      setTimeout(() => {
-        setSaveStatus("idle");
-      }, 1500);
-
-    } catch (err) {
-      console.error("Save failed:", err);
-      setSaveStatus("idle");
-    }
-  };
-
   /* -------------------- AUTO SAVE (DEBOUNCED) -------------------- */
 
   useEffect(() => {
@@ -112,7 +92,6 @@ const ResumeBuilder = () => {
 
     return () => clearTimeout(timeout);
   }, [formData]);
-  
 
   /* -------------------- MANUAL SAVE -------------------- */
 
@@ -130,122 +109,74 @@ const ResumeBuilder = () => {
       setTimeout(() => {
         setSaveStatus("idle");
       }, 1500);
-
     } catch (err) {
       console.error("Manual save failed:", err);
       setSaveStatus("idle");
-      }
-    };
+    }
+  };
 
-      /* ------------------ Resume Download ------------------ */
+  /* ------------------ Resume Download ------------------ */
 
 
-    const handleDownload = () => {
-      const dataStr = JSON.stringify(formData, null, 2);
+  /* -------------------- SHARED FORM PROPS -------------------- */
 
-      const blob = new Blob([dataStr], {
-        type: "application/json",
-      });
+  const formProps = {
+    formData,
+    setFormData,
+    step,
+    setStep,
+    totalSteps: TOTAL_STEPS,
+    saveDraftManually,
+    saveStatus,
+  };
 
-      const url = URL.createObjectURL(blob);
+  /* -------------------- LEFT PANEL (STEP SWITCH) -------------------- */
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${resumeName || "resume"}.json`;
+  const leftPanel =
+    step === 1 ? (
+      <PersonalInfoForm {...formProps} />
+    ) : step === 2 ? (
+      <EducationForm {...formProps} />
+    ) : step === 3 ? (
+      <ExperienceForm {...formProps} />
+    ) : step === 4 ? (
+      <ProjectForm {...formProps} />
+    ) : (
+      <SkillForm {...formProps} />
+    );
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      };
+  /* -------------------- RIGHT PANEL -------------------- */
+
+  const rightPanel = (
+    <ResumePreview
+      formData={formData}
+      resumeName={resumeName}
+      setResumeName={setResumeName}
+      selectedTemplate={selectedTemplate}
+    />
+  );
 
   /* -------------------- UI -------------------- */
 
   return (
-    <div>
+    <div className="flex h-screen min-h-0 flex-col overflow-hidden">
+      <div className="shrink-0 px-6 pt-4">
+        <div className="mb-2 flex items-center gap-2 text-sm text-text-secondary">
+          {saveStatus === "saving" && (
+            <span className="font-medium text-yellow-500">Saving...</span>
+          )}
 
-      {/* Save Status (optional small indicator) */}
-      <div className="text-sm text-text-secondary flex items-center gap-2 mb-2">
-        {saveStatus === "saving" && (
-          <span className="text-yellow-500 font-medium">
-            Saving...
-          </span>
-        )}
+          {saveStatus === "saved" && (
+            <span className="font-medium text-green-600">Saved ✓</span>
+          )}
+        </div>
 
-        {saveStatus === "saved" && (
-          <span className="text-green-600 font-medium">
-            Saved ✓
-          </span>
-        )}
+        <ProgressBar step={step} />
       </div>
 
-      <ProgressBar step={step} />
-
-      <Workspace
-        leftPanel={
-          step === 1 ? (
-            <PersonalInfoForm
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              setStep={setStep}
-              totalSteps={TOTAL_STEPS}
-              saveDraftManually={saveDraftManually}
-              saveStatus={saveStatus}
-            />
-          ) : step === 2 ? (
-            <EducationForm
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              setStep={setStep}
-              totalSteps={TOTAL_STEPS}
-              saveDraftManually={saveDraftManually}
-              saveStatus={saveStatus}
-            />
-          ) : step === 3 ? (
-            <ExperienceForm
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              setStep={setStep}
-              totalSteps={TOTAL_STEPS}
-              saveDraftManually={saveDraftManually}
-              saveStatus={saveStatus}
-            />
-          ) : step === 4 ? (
-            <ProjectForm
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              setStep={setStep}
-              totalSteps={TOTAL_STEPS}
-              saveDraftManually={saveDraftManually}
-              saveStatus={saveStatus}
-            />
-          ) : (
-            <SkillForm
-              formData={formData}
-              setFormData={setFormData}
-              step={step}
-              setStep={setStep}
-              totalSteps={TOTAL_STEPS}
-              saveDraftManually={saveDraftManually}
-              saveStatus={saveStatus}
-            />
-          )
-        }
-        rightPanel={
-          <ResumePreview 
-            formData={formData} 
-            resumeName={resumeName}
-            setResumeName={setResumeName}
-            handleDownload={handleDownload}
-            />
-
-        }
-        
-      />
-      
+      <div className="min-h-0 flex-1">
+        <Workspace leftPanel={leftPanel} rightPanel={rightPanel} />
+      </div>
     </div>
   );
 };

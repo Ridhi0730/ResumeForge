@@ -3,7 +3,6 @@ import { skillCategories } from "../constants/SkillCategories";
 import Card from "../common/Card";
 import FormLayout from "./FormLayout";
 import SkillSection from "../cards/SkillSection";
-import {titleCase} from "../../utils/textFormatter"
 
 const SkillsForm = ({
   formData,
@@ -19,7 +18,7 @@ const SkillsForm = ({
 
   const addSkill = (category, skill) => {
 
-    const formattedSkill = titleCase(skill);
+    const formattedValue = value;
 
     setFormData((prev) => ({
       ...prev,

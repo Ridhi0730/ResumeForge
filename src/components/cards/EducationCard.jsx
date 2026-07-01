@@ -48,6 +48,19 @@ const EducationCard = ({
       }
     }
 
+    // Validate Dates
+    if (field === "startDate") {
+      if (education.endDate && value > education.endDate) {
+        return;
+      }
+    }
+
+    if (field === "endDate") {
+      if (education.startDate && value < education.startDate) {
+        return;
+      }
+    }
+
     handleChange(education.id, field, value);
 
     // Reset grade when grade type changes
@@ -94,7 +107,7 @@ const EducationCard = ({
         </h3>
 
         <p className="text-sm text-text-secondary">
-          {education.degree || "Degree"}
+          {education.branch || "Branch"}
         </p>
       </div>
     </div>
@@ -159,6 +172,7 @@ const EducationCard = ({
           label="Start Date"
           name="startDate"
           value={education.startDate}
+          max={education.endDate || undefined}
           onChange={updateField("startDate")}
         />
 
@@ -167,6 +181,7 @@ const EducationCard = ({
           label="End Date"
           name="endDate"
           value={education.endDate}
+          min={education.startDate || undefined}
           disabled={education.currentlyStudying}
           onChange={updateField("endDate")}
         />

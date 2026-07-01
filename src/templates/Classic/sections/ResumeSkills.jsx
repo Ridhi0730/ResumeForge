@@ -1,4 +1,6 @@
-import { skillCategories } from "../../constants/SkillCategories";
+import { skillCategories } from "../../../components/constants/SkillCategories";
+import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
+
 
 const ResumeSkills = ({ formData }) => {
   const { skills } = formData;
@@ -22,7 +24,9 @@ const ResumeSkills = ({ formData }) => {
               {category.shortTitle}:
             </span>{" "}
             <span>
-              {skills[category.id].join(" • ")}
+              {skills[category.id]
+                .map(displayTitle)
+                .join(" • ")}
             </span>
           </div>
         ))}

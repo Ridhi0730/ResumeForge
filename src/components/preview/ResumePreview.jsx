@@ -1,139 +1,194 @@
-import React from 'react'
-import Card from '../common/Card'
+import React, { useState, useRef, useEffect } from "react";
+import Card from "../common/Card";
 
-import ResumePage from './ResumePage'
-import ResumeHeader from './sections/ResumeHeader'
-import ResumeEducation from './sections/ResumeEducation'
-import ResumeExperience from './sections/ResumeExperience'
-import ResumeProjects from './sections/ResumeProjects'
-import ResumeSkills from './sections/ResumeSkills'
+import Button from "../common/Button";
+import { Minus, Plus } from "lucide-react";
 
-import Button from '../common/Button'
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { templates } from "../../templates";
 
-const ResumePreview = ({ 
-    formData,
-    resumeName,
-    setResumeName,
-    handleDownload,
-   }) => {
+const PAPER_WIDTH = 794;
+const PAPER_HEIGHT = 1123;
+
+const ResumePreview = ({
+  formData,
+  resumeName,
+  setResumeName,
+  selectedTemplate,
+}) => {
+
+  // Template Selection
+  const template = templates[selectedTemplate];
+  const PreviewComponent = template.Preview;
+  const PDFComponent = template.PDF;
+
+  // null = Fit Mode
+  const [zoom, setZoom] = useState(null);
+
+  // Automatically calculated fit
+  const [fitScale, setFitScale] = useState(1);
+
+  const previewContainerRef = useRef(null);
+
+  /* ---------------------------------------------------- */
+  /* Calculate Auto Fit                                    */
+  /* ---------------------------------------------------- */
+
+  useEffect(() => {
+    if (!previewContainerRef.current) return;
+
+    const container = previewContainerRef.current;
+
+    const updateFitScale = () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      if (!width || !height) return;
+
+      const scale = Math.min(width / PAPER_WIDTH, height / PAPER_HEIGHT);
+
+      // Never scale up past 1 in fit mode, and guard against 0/negative
+      setFitScale(scale > 0 ? Math.min(scale, 1) : 1);
+    };
+
+    updateFitScale();
+
+    const observer = new ResizeObserver(updateFitScale);
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
+
+
+  /* ---------------------------------------------------- */
+
+  const currentScale = zoom ?? fitScale;
+
+  /* ---------------- Zoom In ---------------- */
+
+  const handleZoomIn = () => {
+    const current = zoom ?? fitScale;
+    setZoom(Math.min(current + 0.1, 2));
+  };
+
+  /* ---------------- Zoom Out ---------------- */
+
+  const handleZoomOut = () => {
+    const current = zoom ?? fitScale;
+    const next = current - 0.1;
+
+    // Return to Auto Fit
+    if (next <= fitScale) {
+      setZoom(null);
+      return;
+    }
+
+    setZoom(next);
+  };
 
   return (
-    <Card className="rf-panel h-full flex flex-col bg-bg-workspace">
-      {/* A4 Paper */}
-      <div className='flex-1 overflow-y-auto p-8'>
-      <div className="flex justify-center items-start w-full h-full">
+    <div className="relative h-full min-h-0 w-full">
+      <Card
+        noPadding
+        className="absolute inset-0 flex flex-col overflow-hidden bg-gray-100"
+      >
+        {/* ================= HEADER ================= */}
 
-        <div className="p-1 origin-top transition-transform duration-300
-        scale-[0.45] sm:scale[0.55] md:scale-[0.65] lg:scale[0.72] xl:scale-[0.82] 2xl:scale-[0.90]">
-      
-          <ResumePage>
+        <div className="flex items-center justify-between border-b bg-white px-6 py-4">
+          <h2 className="text-lg font-semibold text-text-primary">
+            Resume Preview
+          </h2>
 
-            <ResumeHeader 
-              formData={formData} 
-            />
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleZoomOut}
+              disabled={zoom === null}
+            >
+              <Minus size={18} />
+            </Button>
 
-            <ResumeEducation 
-              formData={formData}
-            />
+            <div className="w-16 text-center text-sm font-semibold">
+              {zoom === null ? "Fit" : `${Math.round(currentScale * 100)}%`}
+            </div>
 
-            <ResumeExperience 
-              formData={formData}
-            />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleZoomIn}
+              disabled={currentScale >= 2}
+            >
+              <Plus size={18} />
+            </Button>
+          </div>
+        </div>
 
-            <ResumeProjects 
-              formData={formData}
-            />
+        {/* ================= PREVIEW ================= */}
 
-            <ResumeSkills 
-              formData={formData}
-            />          
+        <div
+          ref={previewContainerRef}
+          className="min-h-0 flex-1 overflow-auto p-6"
+        >
+          <div
+            style={{
+              width: PAPER_WIDTH * currentScale,
+              height: PAPER_HEIGHT * currentScale,
+              margin: "0 auto",
+            }}
+          >
+            <div
+              style={{
+                width: PAPER_WIDTH,
+                height: PAPER_HEIGHT,
+                transform: `scale(${currentScale})`,
+                transformOrigin: "top left",
+                transition: "transform 0.2s ease",
+              }}
+            >
+              <PreviewComponent formData={formData} />
+            </div>
+          </div>
+        </div>
 
-          </ResumePage>
+        {/* ================= FOOTER ================= */}
 
-          <div className="mt-6 flex items-stretch gap-3">
-          <div className="flex-1">
+        <div className="border-t bg-white p-5">
+          <div className="flex items-center gap-3">
             <input
               type="text"
-              label="Resume Name"
               value={resumeName}
               onChange={(e) => setResumeName(e.target.value)}
               placeholder="My Resume"
-              className="w-full text-xl rounded-xl border border-brand-primary/30 px-5 py-2 focus:border-brand-primary focus:outline-none"
+              className="
+                flex-1
+                rounded-xl
+                border
+                border-brand-primary/30
+                px-5
+                py-3
+                text-sm
+                focus:border-brand-primary
+                focus:outline-none
+              "
             />
-          </div>
 
-          <div className='flex items-end'>
-          <Button
-            variant="primary"
-            onClick={handleDownload}
-            className="w-full md:w-auto px-5 py-2"
-          >
-            Download Resume
-          </Button>
+            <PDFDownloadLink
+              document={<PDFComponent formData={formData} />}
+              fileName={`${resumeName || "Resume"}.pdf`}
+              >
+                {({ loading }) => (
+                  <Button 
+                    variant="primary">
+                      {loading ? "Generating" : "Download PDF"}
+                    </Button>
+                )}
+            </PDFDownloadLink>
           </div>
         </div>
-          
-          </div>
-        </div>
-      </div>
-    </Card>
-  )
-}
+      </Card>
+    </div>
+  );
+};
 
-export default ResumePreview
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react'
-
-// const ResumePreview = ({ formData }) => {
-//   return (
-//     <div className='p-6 flex flex-col items-left justify-top bg-brand-primary border-2'>
-//       <h2>Resume Preview</h2>
-//       <p> {formData.fullName}</p>
-//       <p> {formData.email}</p>
-//       <p> {formData.phone}</p>
-//       <p> {formData.city}</p>
-//       <p> {formData.linkedin}</p>
-//       <p> {formData.github}</p>
-//     </div>
-//   )
-// }
-
-// export default ResumePreview
+export default ResumePreview;

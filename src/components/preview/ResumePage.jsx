@@ -3,8 +3,8 @@ const ResumePage = ({ children }) => {
     <div
       className="
         bg-white
-        w-[210mm]
-        min-h-[297mm]
+        w-[794px]
+        min-h-[1123px]
         shadow-2xl
 
         px-12
