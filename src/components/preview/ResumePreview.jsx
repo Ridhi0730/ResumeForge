@@ -15,9 +15,11 @@ const ResumePreview = ({
   resumeName,
   setResumeName,
   selectedTemplate,
+  setSelectedTemplate,
 }) => {
 
   // Template Selection
+  console.log(templates)
   const template = templates[selectedTemplate];
   const PreviewComponent = template.Preview;
   const PDFComponent = template.PDF;
@@ -96,8 +98,21 @@ const ResumePreview = ({
 
         <div className="flex items-center justify-between border-b bg-white px-6 py-4">
           <h2 className="text-lg font-semibold text-text-primary">
-            Resume Preview
+            Templates:
           </h2>
+          
+          <select
+            value={selectedTemplate}
+            onChange={(e) => setSelectedTemplate(e.target.value)}
+            className="rounded-lg border border-brand-primary/20 bg-white px-4          py-2"
+          >
+            {Object.entries(templates).map(([id, template]) => (
+              <option key={id} value={id}>
+                {template.name}
+              </option>
+            ))}
+          </select>
+          
 
           <div className="flex items-center gap-2">
             <Button

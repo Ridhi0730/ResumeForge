@@ -152,7 +152,9 @@ const ResumeBuilder = () => {
       formData={formData}
       resumeName={resumeName}
       setResumeName={setResumeName}
+
       selectedTemplate={selectedTemplate}
+      setSelectedTemplate={setSelectedTemplate}
     />
   );
 
