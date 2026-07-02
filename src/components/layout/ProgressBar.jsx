@@ -6,6 +6,7 @@ import {
   Folder,
   Cog,
   Check,
+  Newspaper,
 } from "lucide-react";
 
 const ProgressBar = ({ step }) => {
@@ -18,21 +19,26 @@ const ProgressBar = ({ step }) => {
     },
     {
       id: 2,
+      title: "Summary",
+      icon: Newspaper,
+    },
+    {
+      id: 3,
       title: "Education",
       icon: GraduationCap,
     },
     {
-      id: 3,
+      id: 4,
       title: "Experience",
       icon: Briefcase,
     },
     {
-      id: 4,
+      id: 5,
       title: "Projects",
       icon: Folder,
     },
     {
-      id: 5,
+      id: 6,
       title: "Skills",
       icon: Cog,
     },

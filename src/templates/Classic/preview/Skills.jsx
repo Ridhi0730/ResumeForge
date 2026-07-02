@@ -1,38 +1,52 @@
+import React from "react";
+
+import SectionTitle from "../../../components/common/SectionTitle";
+import config from "../config";
+
 import { skillCategories } from "../../../components/constants/SkillCategories";
-import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
 
+import {
+  displayTitle,
+} from "../shared/formatters";
 
-const ResumeSkills = ({ formData }) => {
-  const { skills } = formData;
+import { joinValues } from "../helpers";
+
+const Skills = ({ formData }) => {
+  const skills = formData.skills || {};
 
   const categoriesToShow = skillCategories.filter(
-    (category) => skills[category.id]?.length > 0
+    (category) => skills[category.id]?.length
   );
 
   if (!categoriesToShow.length) return null;
 
   return (
-    <section className="mt-4">
-      <h2 className="text-sm font-bold uppercase tracking-wide border-b-2 border-brand-primary pb-1">
-        Skills
-      </h2>
+    <section className="mt-6">
+      <SectionTitle>
+        {config.sectionTitles.skills}
+      </SectionTitle>
 
-      <div className="mt-1 space-y-2 text-xs">
+      <div className="mt-3 space-y-2 text-xs">
+
         {categoriesToShow.map((category) => (
           <div key={category.id}>
+
             <span className="font-semibold">
               {category.shortTitle}:
             </span>{" "}
+
             <span>
-              {skills[category.id]
-                .map(displayTitle)
-                .join(" • ")}
+              {joinValues(
+                skills[category.id].map(displayTitle)
+              )}
             </span>
+
           </div>
         ))}
+
       </div>
     </section>
   );
 };
 
-export default ResumeSkills;
+export default Skills;

@@ -17,19 +17,32 @@ const SkillsForm = ({
   const [activeCategory, setActiveCategory] = useState("technical")
 
   const addSkill = (category, skill) => {
+    const formattedSkill = skill?.trim();
 
-    const formattedValue = value;
+    // Ignore empty/whitespace-only input
+    if (!formattedSkill) return;
 
-    setFormData((prev) => ({
-      ...prev,
-      skills: {
-        ...prev.skills,
-        [category]: [
-          ...prev.skills[category],
-          formattedSkill,
-        ],
-      },
-    }));
+    setFormData((prev) => {
+      const existing = prev.skills[category] || [];
+
+      // Case-insensitive duplicate check — this is the actual fix.
+      // Previously there was no check at all here, which is how the
+      // same tag (e.g. "Tailwind CSS") could end up added multiple
+      // times and show up as "Tailwind CSS CSS CSS" in the resume.
+      const alreadyExists = existing.some(
+        (item) => item.toLowerCase() === formattedSkill.toLowerCase()
+      );
+
+      if (alreadyExists) return prev;
+
+      return {
+        ...prev,
+        skills: {
+          ...prev.skills,
+          [category]: [...existing, formattedSkill],
+        },
+      };
+    });
   };
 
   const removeSkill = (category, skill) => {

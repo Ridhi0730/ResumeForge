@@ -1,84 +1,99 @@
-import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
+import React from "react";
 
-const ResumeProject = ({ formData }) => {
-  const { projects } = formData;
+import SectionTitle from "../../../components/common/SectionTitle";
+import config from "../config"
+
+import {
+  displaySentence,
+  displayTitle,
+} from "../shared/formatters";
+
+import {
+  formatDateRange,
+  getBullets,
+} from "../helpers";
+
+const Projects = ({ formData }) => {
+  const projects = formData.projects || [];
 
   if (!projects.length) return null;
 
   return (
     <section className="mt-6">
-      <h2 className="text-sm font-bold uppercase border-b-2 border-brand-primary pb-1">
-        Projects
-      </h2>
+      <SectionTitle>
+        {config.sectionTitles.projects}
+      </SectionTitle>
 
-      <div className="mt-3 space-y-5">
+      <div className="mt-4 space-y-5">
         {projects.map((project) => {
-          const bullets = project.description
-            ?.split("\n")
-            .filter((line) => line.trim());
+          const bullets = getBullets(project);
 
           return (
             <div key={project.id}>
               {/* Title + Dates */}
-              <div className="flex justify-between items-start">
-                <h3 className="font-semibold text-sm">
+
+              <div className="flex items-start justify-between gap-4">
+
+                <h3 className="text-sm font-semibold">
                   {displayTitle(project.title)}
                 </h3>
 
-                <span className="text-xs text-gray-600 whitespace-nowrap">
-                  {displayDate(project.startDate)}
-                  {project.startDate && project.endDate && " – "}
-                  {displayDate(project.endDate)}
+                <span className="whitespace-nowrap text-xs text-gray-600">
+                  {formatDateRange(
+                    project.startDate,
+                    project.endDate
+                  )}
                 </span>
+
               </div>
 
               {/* Role */}
+
               {project.role && (
-                <p className="text-sm italic text-gray-700">
+                <p className="mt-1 text-sm italic text-gray-700">
                   {displayTitle(project.role)}
                 </p>
               )}
 
-              {/* Technologies */}
+              {/* Technologies — deduped before rendering, so a
+                  repeated tag entered twice (or a data glitch) can't
+                  render as e.g. "Tailwind CSS CSS CSS" */}
+
               {project.technologies?.length > 0 && (
-              <div className="flex flex-wrap gap-0.5 mt-1.5">
-                {project.technologies.map((tech, index) => (
-                  <span
-                    key={index}
-                    className="
-                      px-2
-                      py-0.5
-                      rounded-full
-                      text-brand-primary
-                      text-[10px]
-                      font-medium
-                    "
-                  >
-                    {displayTitle(tech)}
-                  </span>
-                ))}
-              </div>
-            )}
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {[...new Set(project.technologies)].map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-medium text-brand-primary"
+                    >
+                      {displayTitle(tech)}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {/* Description */}
-              {bullets?.length > 0 && (
-                <ul className="list-disc ml-5 mt-2 space-y-1 text-xs">
+
+              {bullets.length > 0 && (
+                <ul className="mt-2 ml-5 list-disc space-y-1 text-xs">
                   {bullets.map((bullet, index) => (
                     <li key={index}>
                       {displaySentence(bullet)}
-                      </li>
+                    </li>
                   ))}
                 </ul>
               )}
 
               {/* Links */}
+
               {(project.githubLink || project.liveLink) && (
-                <div className="flex gap-4 mt-2 text-xs">
+                <div className="mt-2 flex gap-4 text-xs">
+
                   {project.githubLink && (
                     <a
                       href={project.githubLink}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noreferrer"
                       className="text-brand-primary hover:underline"
                     >
                       GitHub
@@ -89,12 +104,13 @@ const ResumeProject = ({ formData }) => {
                     <a
                       href={project.liveLink}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noreferrer"
                       className="text-brand-primary hover:underline"
                     >
                       Live Demo
                     </a>
                   )}
+
                 </div>
               )}
             </div>
@@ -105,4 +121,4 @@ const ResumeProject = ({ formData }) => {
   );
 };
 
-export default ResumeProject;
+export default Projects;

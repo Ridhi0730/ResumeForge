@@ -4,6 +4,7 @@ import ProgressBar from "../components/layout/ProgressBar";
 import Workspace from "../components/layout/Workspace";
 
 import PersonalInfoForm from "../components/forms/PersonalInfoForm";
+import SummaryForm from "../components/forms/SummaryForm";
 import EducationForm from "../components/forms/EducationForm";
 import ExperienceForm from "../components/forms/ExperienceForm";
 import ProjectForm from "../components/forms/ProjectForm";
@@ -22,6 +23,8 @@ const getInitialState = () => ({
   city: "",
   linkedin: "",
   github: "",
+
+  summary: "",
 
   education: [],
   experience: [],
@@ -45,7 +48,7 @@ const getInitialState = () => ({
 
 const ResumeBuilder = () => {
   const [step, setStep] = useState(1);
-  const TOTAL_STEPS = 5;
+  const TOTAL_STEPS = 6;
 
   const [saveStatus, setSaveStatus] = useState("idle");
   // idle | saving | saved
@@ -136,14 +139,14 @@ const ResumeBuilder = () => {
     step === 1 ? (
       <PersonalInfoForm {...formProps} />
     ) : step === 2 ? (
-      <EducationForm {...formProps} />
+      <SummaryForm {...formProps} />
     ) : step === 3 ? (
-      <ExperienceForm {...formProps} />
+      <EducationForm {...formProps} />
     ) : step === 4 ? (
+      <ExperienceForm {...formProps} />
+    ) : step === 5 ? (
       <ProjectForm {...formProps} />
-    ) : (
-      <SkillForm {...formProps} />
-    );
+    ) : <SkillForm {...formProps} />
 
   /* -------------------- RIGHT PANEL -------------------- */
 

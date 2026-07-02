@@ -1,84 +1,106 @@
 import React from "react";
-import { displayTitle, displaySentence, displayDate } from "../../../utils/textFormatter";
 
-const ResumeEducation = ({ formData }) => {
-  const { education = [] } = formData;
+import SectionTitle from "../../../components/common/SectionTitle";
+
+import {
+  displaySentence,
+  displayTitle,
+} from "../shared/formatters";
+
+import {
+  formatDateRange,
+  formatDegree,
+  formatGrade,
+} from "../helpers";
+
+const Education = ({ formData }) => {
+  const education = formData.education || [];
 
   if (!education.length) return null;
 
   return (
     <section className="mt-6">
-      <h2 className="text-sm font-bold uppercase border-b-2 border-brand-primary pb-1">
+      <SectionTitle>
         Education
-      </h2>
+      </SectionTitle>
 
       <div className="mt-4 space-y-5">
-        {education.map((item) => {
-
-          return (
+        {education.map((item) => (
           <div key={item.id}>
-            {/* Degree + Dates */}
-            <div className="flex justify-between items-start gap-4">
+            {/* Degree + Date */}
+
+            <div className="flex items-start justify-between gap-4">
+
               <div>
-                {(item.degree || item.branch) && (
-                  <h3 className="font-semibold text-sm">
-                    {displayTitle(item.degree)}
-                    {item.branch && (
-                      <span className="font-normal">
-                        {" "}
-                        ({displayTitle(item.branch)})
-                      </span>
+
+                {formatDegree(
+                  item.degree,
+                  item.branch
+                ) && (
+                  <h3 className="text-sm font-semibold">
+                    {formatDegree(
+                      item.degree,
+                      item.branch
                     )}
                   </h3>
                 )}
 
                 {item.institution && (
                   <p className="text-sm italic">
-                    {displayTitle(item.institution)}
+                    {displayTitle(
+                      item.institution
+                    )}
                   </p>
                 )}
+
               </div>
 
-              <span className="text-xs text-gray-600 whitespace-nowrap">
-                {item.startDate && displayDate(item.startDate)}
+              <span className="whitespace-nowrap text-xs text-gray-600">
 
-                {item.startDate && " - "}
+                {formatDateRange(
+                  item.startDate,
+                  item.endDate,
+                  item.currentlyStudying
+                )}
 
-                {item.currentlyStudying
-                  ? "Present"
-                  : item.endDate
-                  ? displayDate(item.endDate)
-                  : ""}
               </span>
+
             </div>
 
             {/* Location + Grade */}
-            {(item.location || item.gradeValue) && (
-              <div className="flex flex-wrap justify-between text-xs text-gray-600 mt-1">
-                {item.location && (
-                  <span>{displayTitle(item.location)}</span>
-                )}
 
-                {item.gradeValue && (
-                  <span>
-                    {item.gradeType}: {item.gradeValue}
-                  </span>
-                )}
+            {(item.location ||
+              item.gradeValue) && (
+              <div className="mt-1 flex flex-wrap justify-between text-xs text-gray-600">
+
+                <span>
+                  {displayTitle(item.location)}
+                </span>
+
+                <span>
+                  {formatGrade(
+                    item.gradeType,
+                    item.gradeValue
+                  )}
+                </span>
+
               </div>
             )}
 
             {/* Description */}
+
             {item.description && (
-              <p className="text-xs mt-2 leading-relaxed">
-                {displaySentence(item.description)}
+              <p className="mt-2 text-xs leading-relaxed">
+                {displaySentence(
+                  item.description
+                )}
               </p>
             )}
           </div>
-          
-        )})}
+        ))}
       </div>
     </section>
   );
 };
 
-export default ResumeEducation;
+export default Education;
