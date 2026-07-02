@@ -1,23 +1,23 @@
 import ResumePage from "../../components/preview/ResumePage";
 
-import ResumeHeader from "./sections/ResumeHeader";
-import ResumeEducation from "./sections/ResumeEducation";
-import ResumeExperience from "./sections/ResumeExperience";
-import ResumeProjects from "./sections/ResumeProjects";
-import ResumeSkills from "./sections/ResumeSkills";
+import Header from "./preview/Header";
+import Education from "./preview/Education";
+import Experience from "./preview/Experience";
+import Projects from "./preview/Projects";
+import Skills from "./preview/Skills";
 
 const Preview = ({ formData }) => {
   return (
     <ResumePage>
-      <ResumeHeader formData={formData} />
+      <Header formData={formData} />
 
-      <ResumeEducation formData={formData} />
+      <Education formData={formData} />
 
-      <ResumeExperience formData={formData} />
+      <Experience formData={formData} />
 
-      <ResumeProjects formData={formData} />
+      <Projects formData={formData} />
 
-      <ResumeSkills formData={formData} />
+      <Skills formData={formData} />
     </ResumePage>
   );
 };
